@@ -1,11 +1,11 @@
 package com.algaworks.osworks.domain.service;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.algaworks.osworks.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.osworks.domain.exception.NegocioException;
 import com.algaworks.osworks.domain.model.Cliente;
 import com.algaworks.osworks.domain.model.Comentario;
@@ -37,10 +37,17 @@ public class GestaoOrdemServicoService {
 		
 		return ordemServicoRepository.save(ordemServico);
 	}
+	
+	public void finalizar(Long ordemServicoId) {
+		OrdemServico ordemServico = buscar(ordemServicoId);		
 		
+		ordemServico.finalizar();
+		
+		ordemServicoRepository.save(ordemServico);
+	}
+	
 	public Comentario adicionarComentario(Long ordemServicoId, String descricao) {
-		OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
-												.orElseThrow(() -> new NegocioException("Ordem de serviço não encontrada"));		
+		OrdemServico ordemServico = buscar(ordemServicoId);		
 		
 		Comentario comentario = new Comentario();
 		comentario.setOrdemServico(ordemServico);
@@ -48,6 +55,11 @@ public class GestaoOrdemServicoService {
 		comentario.setDescricao(descricao);
 		
 		return comentarioRepository.save(comentario);
+	}
+	
+	private OrdemServico buscar(Long ordemServicoId) {
+		return ordemServicoRepository.findById(ordemServicoId)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException("Ordem de serviço não encontrada"));
 	}
 	
 }
