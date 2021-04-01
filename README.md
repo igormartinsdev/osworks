@@ -1,4 +1,4 @@
-# Osworks - Instruções de uso da app dockerizada em construção
+# Osworks API - Instruções de uso da app dockerizada em construção
 
 Projeto para portfólio de API em Spring Boot que conterá: 
 
