@@ -60,10 +60,10 @@ services:
     depends_on:
       - osworks-mysql  
 ```
-Depois da breve demonstração do código de configuração seguimos o fluxo com o seguinte comando:
+Depois da breve demonstração do código de configuração seguimos o fluxo com o seguinte comando para levantar toda a aplicação com suas respectivas dependências:
 
 > docker-compose up
 
-Esse comando irá levantar toda a app com suas dependências e caso deseja parar digite o seguinte comando:
+Caso deseje parar a APP digite o seguinte comando:
 
 > docker-compose down
