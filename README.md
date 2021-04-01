@@ -25,4 +25,45 @@ O projeto já está com um dockerfile para criação da image da API e será ger
 
 > ./mvnw package -Pdocker
 
-O -Pdocker é um profile já está configurado no pom.xml para poder ler o arquivo dockerfile e gerar a image depois do build da aplicação. Seguindo fluxo você irá agora digitar o seguinte comando para parar o container do MySQL 
+O -Pdocker é um parâmetro de configuração que é passado pelo comando maven referenciando a um profile configurado no pom.xml para poder ler o arquivo dockerfile e gerar a image depois do build da aplicação. Seguindo fluxo você irá agora digitar o seguinte comando para parar o container do MySQL 
+
+> docker container stop osworks-mysql
+
+A app faz uso do docker compose para gerenciar as images necessárias para subir a aplicação e como tendo premissa que o MySQL tem que estar UP primeiramente que a APP, fez se uso do wait-for-it.sh conforme documentação do docker compose. Segue abaixo código da configuração do docker compose.
+
+```yml
+version: "3.9"
+
+networks:
+  osworks-network:
+    driver: bridge
+    
+services:
+  osworks-mysql: 
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+    ports:
+      - "3306:3306"
+    networks:
+      - osworks-network
+  
+  osworks-api:
+    image: osworks-api
+    command: ["/wait-for-it.sh", "osworks-mysql:3306", "-t", "30", "--", "java", "-jar", "osworks-api.jar"]
+    environment:
+      DB_HOST: osworks-mysql
+    ports:
+      - "8080:8080"
+    networks:
+      - osworks-network
+    depends_on:
+      - osworks-mysql  
+```
+Depois da breve demonstração do código de configuração seguimos o fluxo com o seguinte comando:
+
+> docker-compose up
+
+Esse comando irá levantar toda a app com suas dependências e caso deseja parar digite o seguinte comando:
+
+> docker-compose down
