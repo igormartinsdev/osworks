@@ -2,7 +2,7 @@
 
 Projeto para portfólio de API em Spring Boot que conterá: 
 
-* Será disponibilizado como poder ver a documentação da API atravé do Swagger. (Em breve)
+* Será disponibilizado como poder ver a documentação da API através da OpenAPI 3. (Adicionada 06/04/2021)
 * Utilização de DDD (Domain-Driven Design).
 * Exceptions definidas por domínio do negócio e referentes a API.
 * Utilização de camadas (Services e Repository).
