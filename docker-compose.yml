@@ -1,0 +1,27 @@
+version: "3.9"
+
+networks:
+  osworks-network:
+    driver: bridge
+    
+services:
+  osworks-mysql: 
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+    ports:
+      - "3306:3306"
+    networks:
+      - osworks-network
+  
+  osworks-api:
+    image: osworks-api
+    command: ["/wait-for-it.sh", "osworks-mysql:3306", "-t", "30", "--", "java", "-jar", "osworks-api.jar"]
+    environment:
+      DB_HOST: osworks-mysql
+    ports:
+      - "8080:8080"
+    networks:
+      - osworks-network
+    depends_on:
+      - osworks-mysql  
